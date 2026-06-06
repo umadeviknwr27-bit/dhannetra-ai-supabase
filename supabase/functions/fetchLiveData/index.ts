@@ -1,12 +1,16 @@
-// supabase/functions/fetchLiveData/index.ts
 import { serve } from "https://deno.land/std/http/server.ts";
 
-serve(async (req) => {
-  const API_KEY = Deno.env.get("ALPHA_VANTAGE_KEY")!;
-  const SYMBOL = "AAPL"; // change to your stock/crypto
-  const INTERVAL = "5min";
+serve(async () => {
+  // 🔑 Read secrets from Vault (environment variables)
+  const API_KEY = Deno.env.get("3ATRDLV6MWB9W6I7")!;
+  const supabaseUrl = Deno.env.get("https://mrmpldrrnebdaufrtdlj.supabase.co")!;
+  const supabaseKey = Deno.env.get("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybXBsZHJybmViZGF1ZnJ0ZGxqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU4MTAxOCwiZXhwIjoyMDk2MTU3MDE4fQ.0cUxcS7GsW_Xq33Hd2E2k_jKZevqdeAYnLzMn4AHyck")!;
 
+  // Example: fetch AAPL stock data
+  const SYMBOL = "AAPL";
+  const INTERVAL = "5min";
   const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${SYMBOL}&interval=${INTERVAL}&apikey=${API_KEY}`;
+
   const res = await fetch(url);
   const data = await res.json();
 
@@ -21,14 +25,13 @@ serve(async (req) => {
     volume: parseFloat(values["5. volume"]),
   }));
 
-  // Insert into Supabase
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  // Connect to Supabase
   const { createClient } = await import("https://esm.sh/@supabase/supabase-js");
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  // Insert into live_data table
   const { error } = await supabase.from("live_data").insert(entries);
   if (error) console.error(error);
 
-  return new Response("Data inserted");
+  return new Response("Data inserted successfully");
 });
