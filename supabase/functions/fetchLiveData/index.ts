@@ -2,9 +2,9 @@ import { serve } from "https://deno.land/std/http/server.ts";
 
 serve(async () => {
   // 🔑 Read secrets from Vault (environment variables)
-  const API_KEY = Deno.env.get("3ATRDLV6MWB9W6I7")!;
-  const supabaseUrl = Deno.env.get("https://mrmpldrrnebdaufrtdlj.supabase.co")!;
-  const supabaseKey = Deno.env.get("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybXBsZHJybmViZGF1ZnJ0ZGxqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU4MTAxOCwiZXhwIjoyMDk2MTU3MDE4fQ.0cUxcS7GsW_Xq33Hd2E2k_jKZevqdeAYnLzMn4AHyck")!;
+  const API_KEY = Deno.env.get("ALPHA_VANTAGE_KEY")!;
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
   // Example: fetch AAPL stock data
   const SYMBOL = "AAPL";
